@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="40dp"
+        android:layout_margin="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="500dp">
+            <ImageButton
+                android:id="@+id/mode_image"
+                android:src="@drawable/drink_background2"
+                android:scaleType="centerCrop"
+                android:layout_width="match_parent"
+                android:layout_height="430dp" />
+
+            <TextView
+                android:id="@+id/mode_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mode_image"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="15dp"
+                android:text="음료 선택하기"
+                android:textColor="#004D80"
+                android:textSize="30sp"
+                android:fontFamily="@font/nanumsquare_extrabold" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
