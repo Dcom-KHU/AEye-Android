@@ -37,9 +37,16 @@ public class MainActivity extends AppCompatActivity {
 
         //Initialize swipe listener
         //swipeListener = new SwipeListener(relativeLayout, swipeCheckingText);
+
         modes = new ArrayList<>();
-        modes.add(new Mode(R.drawable.drink_background2, "음료 구매하기"));
-        modes.add(new Mode(R.drawable.medicine_background, "의약품 구매하기"));
+        modes.add(new Mode(R.drawable.drink_background2,
+                "음료 구매하기",
+                getResources().getColor(R.color.title_color1, null))
+        );
+        modes.add(new Mode(R.drawable.medicine_background,
+                "의약품 구매하기",
+                getResources().getColor(R.color.title_color2, null))
+        );
 
         adapter = new Adapter(modes,this);
 

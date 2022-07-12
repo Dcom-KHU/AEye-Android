@@ -46,7 +46,9 @@ public class Adapter extends PagerAdapter {
         title = view.findViewById(R.id.mode_title);
 
         imageButton.setImageResource(modes.get(position).getImage());
+        imageButton.setClipToOutline(true);
         title.setText(modes.get(position).getTitle());
+        title.setTextColor(modes.get(position).getTitle_color());
 
         container.addView(view, 0);
         return view;

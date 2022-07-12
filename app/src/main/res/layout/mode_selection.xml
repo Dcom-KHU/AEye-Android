@@ -19,6 +19,10 @@
                 android:id="@+id/mode_image"
                 android:src="@drawable/drink_background2"
                 android:scaleType="centerCrop"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/image_background"
                 android:layout_width="match_parent"
                 android:layout_height="500dp" />
 
@@ -29,10 +33,10 @@
                 android:layout_below="@+id/mode_image"
                 android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="20dp"
                 android:text="음료 선택하기"
                 android:textColor="#004D80"
-                android:textSize="30sp"
+                android:textSize="33sp"
                 android:fontFamily="@font/apple_sd_gothic_neo_heavy" />
 
         </RelativeLayout>

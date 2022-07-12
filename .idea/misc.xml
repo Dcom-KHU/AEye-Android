@@ -4,12 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/image_background.xml" value="0.1815" />
         <entry key="app/src/main/res/drawable/round.xml" value="0.102" />
         <entry key="app/src/main/res/font/font_family.xml" value="0.325" />
         <entry key="app/src/main/res/font/namumsquare_font_family.xml" value="0.325" />
         <entry key="app/src/main/res/font/sd_gothic_neo_font.xml" value="0.325" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2947916666666667" />
-        <entry key="app/src/main/res/layout/mode_selection.xml" value="0.21933898925781242" />
+        <entry key="app/src/main/res/layout/mode_selection.xml" value="0.152435302734375" />
       </map>
     </option>
   </component>
