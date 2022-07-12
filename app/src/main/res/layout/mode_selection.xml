@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center_vertical">
     
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -13,13 +14,13 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="500dp">
+            android:layout_height="600dp">
             <ImageButton
                 android:id="@+id/mode_image"
                 android:src="@drawable/drink_background2"
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"
-                android:layout_height="430dp" />
+                android:layout_height="500dp" />
 
             <TextView
                 android:id="@+id/mode_title"
@@ -27,12 +28,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/mode_image"
                 android:layout_centerInParent="true"
-                android:layout_marginLeft="16dp"
+                android:layout_centerVertical="true"
                 android:layout_marginTop="15dp"
                 android:text="음료 선택하기"
                 android:textColor="#004D80"
                 android:textSize="30sp"
-                android:fontFamily="@font/nanumsquare_extrabold" />
+                android:fontFamily="@font/apple_sd_gothic_neo_heavy" />
 
         </RelativeLayout>
 
