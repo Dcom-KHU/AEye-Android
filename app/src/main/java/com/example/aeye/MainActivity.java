@@ -3,9 +3,11 @@ package com.example.aeye;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.viewpager.widget.ViewPager;
+import me.relex.circleindicator.CircleIndicator;
 import android.animation.ArgbEvaluator;
 
 import android.os.Bundle;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,11 +16,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     //Initialize Variables
-    RelativeLayout relativeLayout;
-    TextView swipeCheckingText;
+    LinearLayout linearLayout;
+    //TextView swipeCheckingText;
 
     ViewPager viewPager;
     Adapter adapter;
+    CircleIndicator circleIndicator;
     List<Mode> modes;
     Integer[] colors = null;
     ArgbEvaluator argbEvaluator = new ArgbEvaluator();
@@ -32,19 +35,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Assign Variables for SwipeListener
-        relativeLayout = findViewById(R.id.relative_layout);
-        swipeCheckingText = findViewById(R.id.swipe_checking_text);
+        linearLayout = findViewById(R.id.linear_layout);
+        //swipeCheckingText = findViewById(R.id.swipe_checking_text);
+
+        circleIndicator = findViewById(R.id.indicator);
 
         //Initialize swipe listener
         //swipeListener = new SwipeListener(relativeLayout, swipeCheckingText);
 
         modes = new ArrayList<>();
         modes.add(new Mode(R.drawable.drink_background2,
-                "음료 구매하기",
+                R.drawable.drink_icon,
+                "음료 구매",
                 getResources().getColor(R.color.title_color1, null))
         );
         modes.add(new Mode(R.drawable.medicine_background,
-                "의약품 구매하기",
+                R.drawable.drink_medicine,
+                "의약품 구매",
                 getResources().getColor(R.color.title_color2, null))
         );
 
@@ -53,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(adapter);
         viewPager.setPadding(100, 0, 100, 0);
+
+        circleIndicator.setViewPager(viewPager);
 
         Integer[] colors_temp = {
                 getResources().getColor(R.color.background_color1, null),
@@ -72,9 +81,17 @@ public class MainActivity extends AppCompatActivity {
                                     colors[position + 1]
                             )
                     );
+                    circleIndicator.setBackgroundColor(
+                            (Integer) argbEvaluator.evaluate(
+                                    positionOffset,
+                                    colors[position],
+                                    colors[position + 1]
+                            )
+                    );
                 }
                 else{
                     viewPager.setBackgroundColor(colors[colors.length - 1]);
+                    circleIndicator.setBackgroundColor(colors[colors.length - 1]);
                 }
             }
             @Override

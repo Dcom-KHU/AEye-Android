@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,13 +41,16 @@ public class Adapter extends PagerAdapter {
         View view = layoutInflater.inflate(R.layout.mode_selection, container, false);
 
         ImageButton imageButton;
+        ImageView icon;
         TextView title;
 
         imageButton = view.findViewById(R.id.mode_image);
+        icon = view.findViewById(R.id.mode_icon);
         title = view.findViewById(R.id.mode_title);
 
         imageButton.setImageResource(modes.get(position).getImage());
         imageButton.setClipToOutline(true);
+        icon.setImageResource(modes.get(position).getIcon());
         title.setText(modes.get(position).getTitle());
         title.setTextColor(modes.get(position).getTitle_color());
 

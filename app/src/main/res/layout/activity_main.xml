@@ -1,34 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/relative_layout"
+    android:orientation="vertical"
+    android:id="@+id/linear_layout"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/swipe_checking_text"
-        android:text="Swipe Gesture"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        android:layout_centerInParent="true"
-        tools:ignore="HardcodedText" />
+    <me.relex.circleindicator.CircleIndicator
+        android:id="@+id/indicator"
+        app:ci_drawable="@drawable/indicator_radius"
+        app:ci_height="10dp"
+        app:ci_margin="5dp"
+        app:ci_width="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
 
     <androidx.viewpager.widget.ViewPager
-        android:foregroundGravity="center"
         android:id="@+id/viewPager"
-        android:layout_centerInParent="true"
-        android:overScrollMode="never"
-        android:clipToPadding="false"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </androidx.viewpager.widget.ViewPager>
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:foregroundGravity="center"
+        android:overScrollMode="never" />
 
 
-
-
-</RelativeLayout>
+</LinearLayout>

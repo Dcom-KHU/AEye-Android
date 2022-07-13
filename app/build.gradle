@@ -38,4 +38,6 @@ dependencies {
     //ViewPager2를 사용해 탭으로 스와이프 뷰 만들기 - ViewPager2에 대한 의존성 추가
     implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation "androidx.cardview:cardview:1.0.0"
+    //Circle Indicator 의존성 추가
+    implementation "me.relex:circleindicator:2.1.6"
 }
