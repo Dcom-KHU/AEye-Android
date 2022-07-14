@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(adapter);
-        viewPager.setPadding(100, 0, 100, 0);
+        viewPager.setPadding(50, 0, 50, 0);
 
         circleIndicator.setViewPager(viewPager);
 

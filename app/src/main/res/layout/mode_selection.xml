@@ -7,18 +7,22 @@
     
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.9"
         app:cardCornerRadius="40dp"
         android:layout_margin="8dp">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="600dp">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="25dp"
+            android:orientation="vertical">
 
             <ImageButton
                 android:id="@+id/mode_image"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"
+                android:layout_height="0dp"
+                android:layout_weight="0.95"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
@@ -28,8 +32,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50sp"
-                android:layout_below="@id/mode_image"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
@@ -50,13 +53,14 @@
                     android:textColor="#004D80"
                     android:textSize="30sp"
                     android:fontFamily="@font/apple_sd_gothic_neo_heavy" />
-
-
             </LinearLayout>
 
-
-        </RelativeLayout>
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"/>
 
 </LinearLayout>
