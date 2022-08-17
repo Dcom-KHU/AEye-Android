@@ -1,27 +1,27 @@
 package com.example.aeye;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
-import androidx.viewpager.widget.ViewPager;
-import me.relex.circleindicator.CircleIndicator;
+import androidx.viewpager2.widget.ViewPager2;
+import me.relex.circleindicator.CircleIndicator3;
 import android.animation.ArgbEvaluator;
 
 import android.os.Bundle;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends FragmentActivity {
     //Initialize Variables
     LinearLayout linearLayout;
     //TextView swipeCheckingText;
 
-    ViewPager viewPager;
-    Adapter adapter;
-    CircleIndicator circleIndicator;
+    ViewPager2 viewPager;
+    FragmentAdapter fragmentAdapter;
+    //Adapter adapter;
+    CircleIndicator3 circleIndicator;
+
     List<Mode> modes;
     Integer[] colors = null;
     ArgbEvaluator argbEvaluator = new ArgbEvaluator();
@@ -38,10 +38,8 @@ public class MainActivity extends AppCompatActivity {
         linearLayout = findViewById(R.id.linear_layout);
         //swipeCheckingText = findViewById(R.id.swipe_checking_text);
 
-        circleIndicator = findViewById(R.id.indicator);
-
         //Initialize swipe listener
-        //swipeListener = new SwipeListener(relativeLayout, swipeCheckingText);
+        //swipeListener = new SwipeListener(linearLayout, swipeCheckingText);
 
         modes = new ArrayList<>();
         modes.add(new Mode(R.drawable.drink_background2,
@@ -55,25 +53,31 @@ public class MainActivity extends AppCompatActivity {
                 getResources().getColor(R.color.title_color2, null))
         );
 
-        adapter = new Adapter(modes,this);
+        fragmentAdapter = new FragmentAdapter(this, modes, modes.size());
 
+        //ViewPager Setting
         viewPager = findViewById(R.id.viewPager);
-        viewPager.setAdapter(adapter);
-        viewPager.setPadding(50, 0, 50, 0);
+        viewPager.setAdapter(fragmentAdapter);
+        viewPager.setPadding(30, 0, 30, 0);
+        viewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+        viewPager.setCurrentItem(0);
+        viewPager.setOffscreenPageLimit(3);
 
+        //CircleIndicator Setting
+        circleIndicator = findViewById(R.id.indicator);
         circleIndicator.setViewPager(viewPager);
+        circleIndicator.createIndicators(modes.size(), 0);
 
         Integer[] colors_temp = {
                 getResources().getColor(R.color.background_color1, null),
                 getResources().getColor(R.color.background_color2, null)
         };
-
         colors = colors_temp;
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if(position < (adapter.getCount() - 1) && position < (colors.length - 1)){
+                if(position < (fragmentAdapter.getItemCount() - 1) && position < (colors.length - 1)){
                     viewPager.setBackgroundColor(
                             (Integer) argbEvaluator.evaluate(
                                     positionOffset,
@@ -102,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
 
 }
 

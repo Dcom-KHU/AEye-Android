@@ -9,7 +9,7 @@
     android:id="@+id/linear_layout"
     tools:context=".MainActivity">
 
-    <me.relex.circleindicator.CircleIndicator
+    <me.relex.circleindicator.CircleIndicator3
         android:id="@+id/indicator"
         app:ci_drawable="@drawable/indicator_radius"
         app:ci_height="10dp"
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp" />
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
