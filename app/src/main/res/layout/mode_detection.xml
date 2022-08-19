@@ -2,18 +2,56 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ModeDetectionActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ModeDetectionActivity" >
 
-    <RelativeLayout
-        android:id="@+id/parentLayout"
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:id="@+id/main_panel_frame"
+        android:gravity="bottom"
+        app:umanoDragView="@id/slide_layout">
 
-        <androidx.camera.view.PreviewView
-            android:id="@+id/previewView"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/parentLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.camera.view.PreviewView
+                    android:id="@+id/previewView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </RelativeLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/slide_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="500dp">
 
-    </RelativeLayout>
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                app:cardCornerRadius="40dp"
+                android:layout_margin="8dp">
+
+                <FrameLayout
+                    android:id="@+id/info_frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+                </FrameLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
 </layout>
