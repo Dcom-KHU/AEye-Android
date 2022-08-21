@@ -4,15 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
-import android.view.View
 import android.widget.Toast
 
 import androidx.camera.core.CameraSelector
@@ -24,7 +21,9 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
+
 import com.example.aeye.databinding.ModeDetectionBinding
+import com.example.aeye.listener.ShakeDetector
 
 import com.example.aeye.utils.Draw
 import com.google.common.util.concurrent.ListenableFuture
@@ -36,7 +35,7 @@ import com.google.mlkit.vision.objects.ObjectDetector
 import com.google.mlkit.vision.objects.custom.CustomObjectDetectorOptions
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
-class ModeDetectionActivity : AppCompatActivity(), SensorEventListener{
+class ModeDetectionActivity : AppCompatActivity(){
 
     private lateinit var binding: ModeDetectionBinding
 
@@ -44,15 +43,13 @@ class ModeDetectionActivity : AppCompatActivity(), SensorEventListener{
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
 
     //For SlidingUpPanelLayout
-    private lateinit var slidingUpPanelLayout: SlidingUpPanelLayout
+    private lateinit var slidingUpPanel: SlidingUpPanelLayout
     private lateinit var fragmentManager: FragmentManager
 
     //For Detect Shake Events
     private lateinit var sensorManager: SensorManager
     private var accelerometer: Sensor? = null
-    private var shakeTime : Long = 0
-    private val shakeSkipTime : Int = 500
-    private val shakeThresholdGravity: Float = 2.7F
+    private var shakeDetector: ShakeDetector? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,13 +57,27 @@ class ModeDetectionActivity : AppCompatActivity(), SensorEventListener{
         binding = DataBindingUtil.setContentView(this, R.layout.mode_detection)
 
         //Initialize SlidingUpPanel
-        slidingUpPanelLayout = binding.mainPanelFrame
+        slidingUpPanel = binding.mainPanelFrame
         //Add EventListener
         //slidingUpPanelLayout.addPanelSlideListener(PanelEventListener())
 
         //Initialize SensorManager and Accelerometer
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        shakeDetector = ShakeDetector()
+
+        //If device detects shake, open/close the panel layout
+        shakeDetector!!.setOnShakeListener(object : ShakeDetector.OnShakeListener {
+            override fun onShake(count: Int) {
+                val state = slidingUpPanel.panelState
+                if (state == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                    slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
+                }
+                else if(state == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+                }
+            }
+        })
 
         if(allPermissionsGranted())
             startDetection()
@@ -90,14 +101,6 @@ class ModeDetectionActivity : AppCompatActivity(), SensorEventListener{
         }
     }
     */
-
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        /* 시작할 부분 */
-    }
-
-    override fun onSensorChanged(event: SensorEvent?) {
-
-    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -191,13 +194,13 @@ class ModeDetectionActivity : AppCompatActivity(), SensorEventListener{
     override fun onResume() {
         super.onResume()
         accelerometer?.also { accel ->
-            sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_NORMAL)
+            sensorManager.registerListener(shakeDetector, accel, SensorManager.SENSOR_DELAY_NORMAL)
         }
     }
 
     override fun onPause() {
         super.onPause()
-        sensorManager.unregisterListener(this)
+        sensorManager.unregisterListener(shakeDetector)
     }
 
     companion object {
