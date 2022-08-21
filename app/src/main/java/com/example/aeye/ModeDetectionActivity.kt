@@ -1,12 +1,18 @@
 package com.example.aeye
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
+import android.view.View
 import android.widget.Toast
 
 import androidx.camera.core.CameraSelector
@@ -16,6 +22,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import com.example.aeye.databinding.ModeDetectionBinding
 
@@ -27,23 +34,68 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.objects.ObjectDetection
 import com.google.mlkit.vision.objects.ObjectDetector
 import com.google.mlkit.vision.objects.custom.CustomObjectDetectorOptions
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
-class ModeDetectionActivity : AppCompatActivity() {
+class ModeDetectionActivity : AppCompatActivity(), SensorEventListener{
 
     private lateinit var binding: ModeDetectionBinding
 
     private lateinit var objectDetector: ObjectDetector
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
 
+    //For SlidingUpPanelLayout
+    private lateinit var slidingUpPanelLayout: SlidingUpPanelLayout
+    private lateinit var fragmentManager: FragmentManager
+
+    //For Detect Shake Events
+    private lateinit var sensorManager: SensorManager
+    private var accelerometer: Sensor? = null
+    private var shakeTime : Long = 0
+    private val shakeSkipTime : Int = 500
+    private val shakeThresholdGravity: Float = 2.7F
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.mode_detection)
+
+        //Initialize SlidingUpPanel
+        slidingUpPanelLayout = binding.mainPanelFrame
+        //Add EventListener
+        //slidingUpPanelLayout.addPanelSlideListener(PanelEventListener())
+
+        //Initialize SensorManager and Accelerometer
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
         if(allPermissionsGranted())
             startDetection()
         else
             ActivityCompat.requestPermissions(
                 this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+
+    }
+
+    /*
+    inner class PanelEventListener : SlidingUpPanelLayout.PanelSlideListener{
+        override fun onPanelSlide(panel: View?, slideOffset: Float) {
+            TODO("Not yet implemented")
+        }
+        override fun onPanelStateChanged(
+            panel: View?,
+            previousState: SlidingUpPanelLayout.PanelState?,
+            newState: SlidingUpPanelLayout.PanelState?
+        ) {
+            TODO("Not yet implemented")
+        }
+    }
+    */
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        /* 시작할 부분 */
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
 
     }
 
@@ -134,6 +186,18 @@ class ModeDetectionActivity : AppCompatActivity() {
         }
 
         cameraProvider.bindToLifecycle(this as LifecycleOwner, cameraSelector, imageAnalysis, preview)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        accelerometer?.also { accel ->
+            sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_NORMAL)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sensorManager.unregisterListener(this)
     }
 
     companion object {
