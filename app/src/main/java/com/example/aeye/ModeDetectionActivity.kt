@@ -37,10 +37,16 @@ import com.google.mlkit.vision.objects.ObjectDetector
 import com.google.mlkit.vision.objects.custom.CustomObjectDetectorOptions
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
-class ModeDetectionActivity : AppCompatActivity(){
+//For TTS API
+import androidx.annotation.RequiresApi //이미 minSDK_Version 26
+import android.speech.tts.TextToSpeech
+import java.util.Locale
+
+class ModeDetectionActivity : AppCompatActivity(), TextToSpeech.OnInitListener{
 
     private lateinit var binding: ModeDetectionBinding
 
+    //For Object Detection
     private lateinit var objectDetector: ObjectDetector
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
 
@@ -53,6 +59,9 @@ class ModeDetectionActivity : AppCompatActivity(){
     private var accelerometer: Sensor? = null
     private var shakeDetector: ShakeDetector? = null
 
+    //For TTS API
+    private lateinit var textToSpeech: TextToSpeech
+    private var titleToSpeechOut: CharSequence? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -70,6 +79,10 @@ class ModeDetectionActivity : AppCompatActivity(){
 
         //Add EventListener
         slidingUpPanel.addPanelSlideListener(PanelEventListener())
+        slidingUpPanel.isTouchEnabled = false
+
+        //Initialize TTS
+        textToSpeech = TextToSpeech(this, this)
 
         //Initialize SensorManager and Accelerometer
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -108,11 +121,35 @@ class ModeDetectionActivity : AppCompatActivity(){
     }
      */
 
+    //SlidingUpPanelLayout 내부 Fragment Transaction 가능 시까지 임시로 사용
     private fun initSlidingUpPanel(title: String, info: String){
         binding.objectDescription.text = info
         binding.objectTitle.text = title
     }
 
+    //For TTS Api
+    private fun speakOut(){
+        textToSpeech.setPitch(0.6F)
+        textToSpeech.setSpeechRate(0.4F)
+        textToSpeech.speak(titleToSpeechOut, TextToSpeech.QUEUE_FLUSH, null, "id1")
+    }
+
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            val result = textToSpeech.setLanguage(Locale.ENGLISH)
+            if (result == TextToSpeech.LANG_NOT_SUPPORTED || result == TextToSpeech.LANG_MISSING_DATA)
+                Log.e("TTS", "This Language is not supported")
+            else
+                speakOut()// onInit에 음성출력할 텍스트를 넣어줌
+        }
+        else{
+            Log.e("TTS", "Initialization Failed!")
+        }
+    }
+
+
+
+    //PanelEventListener
     inner class PanelEventListener : SlidingUpPanelLayout.PanelSlideListener{
         override fun onPanelSlide(panel: View?, slideOffset: Float) {
             //ignore
@@ -122,10 +159,12 @@ class ModeDetectionActivity : AppCompatActivity(){
             previousState: SlidingUpPanelLayout.PanelState?,
             newState: SlidingUpPanelLayout.PanelState?
         ) {
-            //ignore
+            if (newState == SlidingUpPanelLayout.PanelState.EXPANDED)
+                speakOut()
         }
     }
 
+    //Request Permission for Using Camera
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -148,6 +187,8 @@ class ModeDetectionActivity : AppCompatActivity(){
         ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
 
+
+    //Start Image Analysis
     private fun startDetection() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
@@ -199,12 +240,14 @@ class ModeDetectionActivity : AppCompatActivity(){
                             if(binding.parentLayout.childCount > 1)
                                 binding.parentLayout.removeViewAt(1)
 
+                            titleToSpeechOut = i.labels.firstOrNull()?.text ?:"Undefined"
+
                             val element = Draw(context = this,
                                 rect = i.boundingBox,
-                                textString = i.labels.firstOrNull()?.text ?:"Undefined")
+                                textString = titleToSpeechOut.toString())
                                 binding.parentLayout.addView(element)
 
-                            initSlidingUpPanel(i.labels.firstOrNull()?.text ?:"Undefined", "Info")
+                            initSlidingUpPanel(titleToSpeechOut.toString(), "Info")
                         }
                         imageProxy.close()
                     }.addOnFailureListener {
@@ -227,6 +270,12 @@ class ModeDetectionActivity : AppCompatActivity(){
     override fun onPause() {
         super.onPause()
         sensorManager.unregisterListener(shakeDetector)
+    }
+
+    override fun onDestroy() {
+        textToSpeech.stop()
+        textToSpeech.shutdown()
+        super.onDestroy()
     }
 
     companion object {

@@ -78,8 +78,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="0.2"
+                    android:layout_marginTop="10dp"
                     android:layout_marginStart="30dp"
                     android:layout_marginEnd="30dp"
+                    android:textSize="25sp"
+                    android:fontFamily="@font/nanumsquare_regular"
                     />
 
             </LinearLayout>
