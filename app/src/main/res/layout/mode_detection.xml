@@ -29,28 +29,62 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:id="@+id/slide_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="500dp">
+            android:layout_marginTop="500dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/image_background"
+            app:cardCornerRadius="20dp">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                app:cardCornerRadius="40dp"
-                android:layout_margin="8dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp">
 
-                <FrameLayout
-                    android:id="@+id/info_frame"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
-                </FrameLayout>
+                    android:layout_height="60dp"
+                    android:orientation="horizontal">
 
-            </androidx.cardview.widget.CardView>
+                    <ImageButton
+                        android:id="@+id/object_icon"
+                        android:contentDescription="음료 아이콘"
+                        android:background="@color/white"
+                        android:src="@drawable/drink_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="30dp" />
 
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/object_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="15dp"
+                        android:text="음료 이름"
+                        android:textColor="#004D80"
+                        android:textSize="30sp"
+                        android:fontFamily="@font/apple_sd_gothic_neo_heavy"
+                        />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/object_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.2"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
 
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 

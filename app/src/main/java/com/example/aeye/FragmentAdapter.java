@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.aeye.fragment.ModeInfo_Fragment;
+
 import java.util.List;
 
 public class FragmentAdapter extends FragmentStateAdapter {

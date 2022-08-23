@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
+import android.view.View
 import android.widget.Toast
 
 import androidx.camera.core.CameraSelector
@@ -19,13 +20,14 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.*
 import androidx.lifecycle.LifecycleOwner
 
 import com.example.aeye.databinding.ModeDetectionBinding
 import com.example.aeye.listener.ShakeDetector
 
-import com.example.aeye.utils.Draw
+import com.example.aeye.env.Draw
+//import com.example.aeye.fragment.ObjectInfo_Fragment
 import com.google.common.util.concurrent.ListenableFuture
 
 import com.google.mlkit.common.model.LocalModel
@@ -53,13 +55,21 @@ class ModeDetectionActivity : AppCompatActivity(){
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        //For Using ObjectInfo_Fragment
+        /*supportFragmentManager.fragmentFactory = CustomFragmentFactory("음료 예시", R.drawable.drink_icon)*/
+
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.mode_detection)
 
+        binding.objectIcon.setImageResource(intent.getIntExtra("modeIcon", R.drawable.aeye_icon1))
+        binding.objectTitle.setTextColor(intent.getIntExtra("modeColor", R.color.black))
+
         //Initialize SlidingUpPanel
         slidingUpPanel = binding.mainPanelFrame
+
         //Add EventListener
-        //slidingUpPanelLayout.addPanelSlideListener(PanelEventListener())
+        slidingUpPanel.addPanelSlideListener(PanelEventListener())
 
         //Initialize SensorManager and Accelerometer
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -87,20 +97,34 @@ class ModeDetectionActivity : AppCompatActivity(){
 
     }
 
+    //For Using ObjectInfo_Fragment
     /*
+    fun AppCompatActivity.replaceFragment(fragmentFactory: FragmentFactory){
+        val fragment = fragmentFactory.instantiate(classLoader, ObjectInfo_Fragment::class.java.name)
+        supportFragmentManager.commit {
+            replace(binding.slideLayout.id, fragment)
+            addToBackStack(null)
+        }
+    }
+     */
+
+    private fun initSlidingUpPanel(title: String, info: String){
+        binding.objectDescription.text = info
+        binding.objectTitle.text = title
+    }
+
     inner class PanelEventListener : SlidingUpPanelLayout.PanelSlideListener{
         override fun onPanelSlide(panel: View?, slideOffset: Float) {
-            TODO("Not yet implemented")
+            //ignore
         }
         override fun onPanelStateChanged(
             panel: View?,
             previousState: SlidingUpPanelLayout.PanelState?,
             newState: SlidingUpPanelLayout.PanelState?
         ) {
-            TODO("Not yet implemented")
+            //ignore
         }
     }
-    */
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -177,8 +201,10 @@ class ModeDetectionActivity : AppCompatActivity(){
 
                             val element = Draw(context = this,
                                 rect = i.boundingBox,
-                                textString = i.labels.firstOrNull()?.text ?:"undefined")
+                                textString = i.labels.firstOrNull()?.text ?:"Undefined")
                                 binding.parentLayout.addView(element)
+
+                            initSlidingUpPanel(i.labels.firstOrNull()?.text ?:"Undefined", "Info")
                         }
                         imageProxy.close()
                     }.addOnFailureListener {
