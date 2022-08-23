@@ -1,4 +1,4 @@
-package com.example.aeye;
+package com.example.aeye.fragment;
 
 import android.os.Bundle;
 
@@ -10,19 +10,23 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.aeye.R;
+
 
 public class ObjectInfo_Fragment extends Fragment {
 
     private static final String ARG_MODE = "modeIcon";
     private static final String ARG_TITLE = "title";
 
-    private Integer mMode;
-    private String mTitle;
+    private final Integer mMode;
+    private final String mTitle;
 
-    public ObjectInfo_Fragment() {
-        // Required empty public constructor
+    public ObjectInfo_Fragment(String title, Integer modeIcon) {
+        this.mMode = modeIcon;
+        this.mTitle = title;
     }
 
+    /*
     public static ObjectInfo_Fragment newInstance(String title, Integer modeIcon) {
         ObjectInfo_Fragment fragment = new ObjectInfo_Fragment();
         Bundle args = new Bundle();
@@ -40,6 +44,7 @@ public class ObjectInfo_Fragment extends Fragment {
             mMode = getArguments().getInt(ARG_MODE);
         }
     }
+     */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
