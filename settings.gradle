@@ -4,6 +4,11 @@ pluginManagement {
         google()
         mavenCentral()
         maven { url 'https://jitpack.io' } //For AndroidSlidingUpPanel
+        maven {
+            name 'ossrh-snapshot'
+            url 'https://oss.sonatype.org/content/repositories/snapshots'
+        }
+        mavenLocal()
     }
 }
 dependencyResolutionManagement {
@@ -12,6 +17,11 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { url 'https://jitpack.io' } //For AndroidSlidingUpPanel
+        maven {
+            name 'ossrh-snapshot'
+            url 'https://oss.sonatype.org/content/repositories/snapshots'
+        }
+        mavenLocal()
     }
 }
 rootProject.name = "AEye"
