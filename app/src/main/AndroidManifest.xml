@@ -3,12 +3,15 @@
     package="com.example.aeye">
 
     <uses-feature android:name="android.hardware.camera.any" />
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28" />
-    <!--    가속도계 센서 - 진동, 운동가속을 감지하는 기능 사용-->
-    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" /> <!-- 가속도계 센서 - 진동, 운동가속을 감지하는 기능 사용 -->
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -17,11 +20,12 @@
         android:roundIcon="@drawable/aeye_icon1"
         android:supportsRtl="true"
         android:theme="@style/Theme.AEye.NoActionBar">
-
         <activity
-            android:name=".ModeDetectionActivity" />
+            android:name=".activity.ModeImageAnalysisActivity"
+            android:exported="false" />
+        <activity android:name=".activity.ModeDetectionActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
