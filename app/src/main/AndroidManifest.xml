@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AEye.NoActionBar">
         <activity
-            android:name=".activity.ModeImageAnalysisActivity"
+            android:name=".activity.ModeLiveAnalysisActivity"
             android:exported="false" />
         <activity android:name=".activity.ModeDetectionActivity" />
         <activity
