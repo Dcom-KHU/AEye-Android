@@ -2,13 +2,18 @@ package com.example.aeye.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.aeye.R
-
+import com.example.aeye.databinding.ActivityImageAnalysisBinding
 
 class ModeImageAnalysisActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityImageAnalysisBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_image_analysis)
+
+        binding = ActivityImageAnalysisBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
 
 
     }
