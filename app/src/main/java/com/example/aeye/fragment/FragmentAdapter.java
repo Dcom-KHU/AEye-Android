@@ -1,11 +1,11 @@
-package com.example.aeye;
+package com.example.aeye.fragment;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.aeye.fragment.ModeInfo_Fragment;
+import com.example.aeye.Mode;
 
 import java.util.List;
 

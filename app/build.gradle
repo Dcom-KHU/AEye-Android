@@ -30,12 +30,16 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    aaptOptions {
-        noCompress "tflite"
-    }
     dataBinding {
         enabled = true
     }
+    viewBinding {
+        enabled = true
+    }
+    androidResources {
+        noCompress 'tflite'
+    }
+    namespace 'com.example.aeye'
 }
 
 dependencies {
@@ -63,9 +67,14 @@ dependencies {
     implementation 'androidx.camera:camera-camera2:1.1.0'
     implementation 'androidx.camera:camera-lifecycle:1.1.0'
     implementation 'androidx.camera:camera-view:1.1.0'
-    implementation 'org.tensorflow:tensorflow-lite:2.2.0'
+    implementation 'org.tensorflow:tensorflow-lite:2.7.0'
     implementation 'org.tensorflow:tensorflow-lite-gpu:2.2.0'
     implementation 'org.tensorflow:tensorflow-lite:0.0.0-nightly-SNAPSHOT'
+    implementation 'org.tensorflow:tensorflow-lite-support:0.3.0'
+
+    //Pytorch Implementation
+    implementation 'org.pytorch:pytorch_android_lite:1.10.0'
+    implementation 'org.pytorch:pytorch_android_torchvision_lite:1.10.0'
 
     //For SlidingUpPanel
     implementation 'com.github.hannesa2:AndroidSlidingUpPanel:4.2.1'

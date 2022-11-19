@@ -1,4 +1,4 @@
-package com.example.aeye
+package com.example.aeye.activity
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -38,8 +38,8 @@ import com.google.mlkit.vision.objects.custom.CustomObjectDetectorOptions
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
 //For TTS API
-import androidx.annotation.RequiresApi //이미 minSDK_Version 26
 import android.speech.tts.TextToSpeech
+import com.example.aeye.R
 import java.util.Locale
 
 class ModeDetectionActivity : AppCompatActivity(), TextToSpeech.OnInitListener{
@@ -106,7 +106,8 @@ class ModeDetectionActivity : AppCompatActivity(), TextToSpeech.OnInitListener{
             startDetection()
         else
             ActivityCompat.requestPermissions(
-                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+            )
 
     }
 

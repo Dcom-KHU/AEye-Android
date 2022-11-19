@@ -1,4 +1,4 @@
-package com.example.aeye;
+package com.example.aeye.activity;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -8,6 +8,10 @@ import android.animation.ArgbEvaluator;
 
 import android.os.Bundle;
 import android.widget.LinearLayout;
+
+import com.example.aeye.fragment.FragmentAdapter;
+import com.example.aeye.Mode;
+import com.example.aeye.R;
 
 import java.util.ArrayList;
 import java.util.List;

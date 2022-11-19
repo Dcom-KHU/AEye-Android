@@ -15,8 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.aeye.Mode;
-import com.example.aeye.ModeDetectionActivity;
 import com.example.aeye.R;
+import com.example.aeye.activity.ModeLiveAnalysisActivity;
 
 public class ModeInfo_Fragment extends Fragment {
 
@@ -54,7 +54,7 @@ public class ModeInfo_Fragment extends Fragment {
         title.setTextColor(current_mode.getTitle_color());
 
         imageButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), ModeDetectionActivity.class);
+            Intent intent = new Intent(getActivity(), ModeLiveAnalysisActivity.class);
             intent.putExtra("modeIcon", current_mode.getIcon());
             intent.putExtra("modeColor", current_mode.getTitle_color());
             startActivity(intent);
