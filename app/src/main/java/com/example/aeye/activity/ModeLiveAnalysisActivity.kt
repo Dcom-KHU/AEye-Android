@@ -28,6 +28,7 @@ import com.example.aeye.R
 import com.example.aeye.databinding.ActivityLiveAnalysisBinding
 import com.example.aeye.fragment.CameraFragment
 import com.example.aeye.listener.ShakeDetector
+import com.example.aeye.listener.TextToSpeechManager
 import com.example.aeye.tflite.CustomClassifier
 import com.example.aeye.tflite.YuvToRgbConverter
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -50,7 +51,7 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
     private var shakeDetector : ShakeDetector ?= null
 
     /**For TTS API**/
-    private lateinit var textToSpeech: TextToSpeech
+    private lateinit var textToSpeech: TextToSpeechManager
     private var infoToSpeechOut : CharSequence ?= null
 
     /** For Classifier **/
@@ -80,6 +81,10 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
 
         slidingUpPanel.addPanelSlideListener(PanelEventListener())
         slidingUpPanel.isTouchEnabled = false
+
+        /**Initialize TTS**/
+        textToSpeech = TextToSpeechManager()
+        textToSpeech.init(this)
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
