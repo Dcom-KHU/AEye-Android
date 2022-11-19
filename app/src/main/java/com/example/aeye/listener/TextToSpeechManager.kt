@@ -2,6 +2,7 @@ package com.example.aeye.listener
 
 import android.content.Context
 import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import java.util.*
 
@@ -58,4 +59,21 @@ class TextToSpeechManager {
         }
     }
 
+    fun runTTS() {
+        mTextToSpeech!!.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+            override fun onStart(utteranceId: String?) {
+                //ignore
+            }
+
+            override fun onDone(utteranceId: String?) {
+
+            }
+
+            @Deprecated("Deprecated in Java")
+            override fun onError(utteranceId: String?) {
+                //ignore
+            }
+
+        })
+    }
 }
