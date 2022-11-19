@@ -246,7 +246,8 @@ class ModeDetectionActivity : AppCompatActivity(), TextToSpeech.OnInitListener{
                             val element = Draw(context = this,
                                 rect = i.boundingBox,
                                 textString = titleToSpeechOut.toString())
-                                binding.parentLayout.addView(element)
+
+                            binding.parentLayout.addView(element)
 
                             initSlidingUpPanel(titleToSpeechOut.toString(), "Info")
                         }

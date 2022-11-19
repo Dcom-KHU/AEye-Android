@@ -3,6 +3,8 @@ package com.example.aeye.activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
@@ -13,17 +15,22 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.util.Size
 import android.view.Surface
+import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.example.aeye.R
 import com.example.aeye.databinding.ActivityLiveAnalysisBinding
 import com.example.aeye.fragment.CameraFragment
+import com.example.aeye.listener.ShakeDetector
 import com.example.aeye.tflite.CustomClassifier
 import com.example.aeye.tflite.YuvToRgbConverter
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.internal.synchronized
 import java.io.IOException
@@ -33,24 +40,46 @@ import java.util.*
 class ModeLiveAnalysisActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLiveAnalysisBinding
-    private lateinit var cls : CustomClassifier
 
+    /**For slidingUpPanelLayout**/
+    private lateinit var slidingUpPanel: SlidingUpPanelLayout
+
+    /**For detecting shake events**/
+    private lateinit var sensorManager : SensorManager
+    private var accelerometer : Sensor ?= null
+    private var shakeDetector : ShakeDetector ?= null
+
+    /**For TTS API**/
+    private lateinit var textToSpeech: TextToSpeech
+    private var infoToSpeechOut : CharSequence ?= null
+
+    /** For Classifier **/
+    private lateinit var cls : CustomClassifier
     private var previewWidth : Int = 0
     private var previewHeight : Int = 0
     private var sensorOrientation : Int = 0
-
     private var rgbFrameBitmap : Bitmap ?= null
 
+    /** For handling background thread**/
     private var handlerThread: HandlerThread ?= null
     private var handler: Handler ?= null
-
     private var isProcessingFrame : Boolean = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityLiveAnalysisBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        /**Init slidingUpPanel and its elements**/
+        slidingUpPanel = binding.mainPanelFrame
+
+        binding.objectIcon.setImageResource(intent.getIntExtra("modeIcon", R.drawable.aeye_icon1))
+        binding.objectTitle.setTextColor(intent.getIntExtra("modeColor", R.color.black))
+
+        slidingUpPanel.addPanelSlideListener(PanelEventListener())
+        slidingUpPanel.isTouchEnabled = false
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
@@ -247,6 +276,19 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
 
     private fun runInBackground(r : Runnable){
         if (handler != null) handler!!.post(r)
+    }
+
+    inner class PanelEventListener : SlidingUpPanelLayout.PanelSlideListener {
+        override fun onPanelSlide(panel: View?, slideOffset: Float) {
+            //ignore
+        }
+        override fun onPanelStateChanged(
+            panel: View?,
+            previousState: SlidingUpPanelLayout.PanelState?,
+            newState: SlidingUpPanelLayout.PanelState?
+        ) {
+           /**if (newState == SlidingUpPanelLayout.PanelState.EXPANDED)**/
+        }
     }
 
     companion object{
