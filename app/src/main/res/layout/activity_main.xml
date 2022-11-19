@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/linear_layout"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
 
     <me.relex.circleindicator.CircleIndicator3
         android:id="@+id/indicator"
