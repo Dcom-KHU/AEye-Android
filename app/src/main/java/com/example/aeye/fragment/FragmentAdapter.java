@@ -6,7 +6,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.aeye.Mode;
-import com.example.aeye.fragment.ModeInfo_Fragment;
 
 import java.util.List;
 
