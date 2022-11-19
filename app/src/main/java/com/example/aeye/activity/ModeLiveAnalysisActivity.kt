@@ -15,9 +15,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
-import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.util.Size
+import android.view.KeyEvent
 import android.view.Surface
 import android.view.View
 import android.view.WindowManager
@@ -73,20 +73,38 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
         binding = ActivityLiveAnalysisBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        /**Get Intent from ModeInfo_Fragment**/
+        val modeIcon : Int = intent.getIntExtra("modeIcon", R.drawable.aeye_icon1)
+        val modeColor : Int = intent.getIntExtra("modeColor", R.color.black)
+
         /**Init slidingUpPanel and its elements**/
         slidingUpPanel = binding.mainPanelFrame
-
-        binding.objectIcon.setImageResource(intent.getIntExtra("modeIcon", R.drawable.aeye_icon1))
-        binding.objectTitle.setTextColor(intent.getIntExtra("modeColor", R.color.black))
-
         slidingUpPanel.addPanelSlideListener(PanelEventListener())
         slidingUpPanel.isTouchEnabled = false
+
+        binding.objectIcon.setImageResource(modeIcon)
+        binding.objectTitle.setTextColor(modeColor)
 
         /**Initialize TTS**/
         textToSpeech = TextToSpeechManager()
         textToSpeech.init(this)
 
+        /**Initialize SensorManager and Accelerometer **/
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        shakeDetector = ShakeDetector()
+
+        shakeDetector!!.setOnShakeListener(object : ShakeDetector.OnShakeListener {
+            override fun onShake(count: Int) {
+
+            }
+        })
+
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+        /** Init Classifier **/
+        if (modeIcon == R.drawable.drink_medicine || modeIcon == R.drawable.drink_icon)
+            cls = CustomClassifier("object_detection_example.tflite")
 
         try {
             cls.init()
@@ -101,6 +119,16 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
             requestPermissions(Array(1) { CAMERA_PERMISSION }, PERMISSION_REQUEST_CODE)
         }
 
+    }
+
+    /**Detect pressing volume down key**/
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
+            if (slidingUpPanel.panelState == SlidingUpPanelLayout.PanelState.COLLAPSED)
+                slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
     @OptIn(InternalCoroutinesApi::class)
