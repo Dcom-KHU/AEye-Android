@@ -7,7 +7,8 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28" /> <!-- 가속도계 센서 - 진동, 운동가속을 감지하는 기능 사용 -->
+        android:maxSdkVersion="28" />
+    <!-- 가속도계 센서 - 진동, 운동가속을 감지하는 기능 사용 -->
     <uses-feature
         android:name="android.hardware.sensor.accelerometer"
         android:required="true" />

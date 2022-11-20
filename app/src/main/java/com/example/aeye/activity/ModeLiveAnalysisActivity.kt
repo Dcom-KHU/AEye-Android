@@ -29,6 +29,7 @@ import com.example.aeye.ObjectInfoViewModel
 import com.example.aeye.ObjectInfoViewModelFactory
 import com.example.aeye.R
 import com.example.aeye.application.DetectApplication
+import com.example.aeye.database.ObjectInfo
 import com.example.aeye.databinding.ActivityLiveAnalysisBinding
 import com.example.aeye.fragment.CameraFragment
 import com.example.aeye.listener.ShakeDetector
@@ -54,8 +55,10 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
     private var accelerometer : Sensor ?= null
     private var shakeDetector : ShakeDetector ?= null
 
-    /**For TTS API**/
+    /**For using TTS API**/
     private lateinit var textToSpeech: TextToSpeechManager
+    private var detectedClass : String = "Undefined"
+    private var detectedRating : Float = 0f
     private var infoToSpeechOut : CharSequence ?= null
 
     /** For Classifier **/
@@ -129,7 +132,7 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
 
     }
 
-    /**Detect pressing volume down key**/
+    /** Detect pressing volume down key **/
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
             if (slidingUpPanel.panelState == SlidingUpPanelLayout.PanelState.COLLAPSED)
@@ -303,10 +306,14 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
                 val output : Pair<String, Float> = cls.classify(rgbFrameBitmap!!, sensorOrientation)
 
                 runOnUiThread {
+                    /**
                     val resultStr : String = String.format(Locale.ENGLISH,
                         "class : %s, prob : %.2f%%",
                         output.first, output.second * 100)
-                    binding.objectTitle.text = resultStr
+                    **/
+                    detectedRating = output.second * 100
+                    detectedClass = if(detectedRating >= 95) output.first else "Undefined"
+                    setPanelLayoutData(detectedClass)
                 }
             }
             image.close()
@@ -317,6 +324,12 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
 
     private fun runInBackground(r : Runnable){
         if (handler != null) handler!!.post(r)
+    }
+
+    private fun setPanelLayoutData(detected : String){
+        val receivedData : ObjectInfo = objectInfoViewModel.findByClassName(detected)
+        binding.objectTitle.text = receivedData.objectName
+        binding.objectDescription.text = receivedData.className
     }
 
     inner class PanelEventListener : SlidingUpPanelLayout.PanelSlideListener {
