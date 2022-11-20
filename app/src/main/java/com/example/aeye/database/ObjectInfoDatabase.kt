@@ -18,8 +18,9 @@ abstract class ObjectInfoDatabase: RoomDatabase() {
 
             instance?.let {
                 scope.launch {
-                    var objectInfoDao = it.objectInfoDao()
-
+                    for (info : ObjectInfo in initDatabase()){
+                        it.objectInfoDao().insert(info)
+                    }
                 }
             }
         }
