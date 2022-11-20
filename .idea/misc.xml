@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../../layout/custom_preview.xml" value="0.17205518639605977" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/image_background.xml" value="0.1815" />
         <entry key="app/src/main/res/drawable/indicator_radius.xml" value="0.1" />
@@ -10,8 +11,15 @@
         <entry key="app/src/main/res/font/font_family.xml" value="0.325" />
         <entry key="app/src/main/res/font/namumsquare_font_family.xml" value="0.325" />
         <entry key="app/src/main/res/font/sd_gothic_neo_font.xml" value="0.325" />
+        <entry key="app/src/main/res/layout/activity_image_analysis.xml" value="0.12239583333333333" />
+        <entry key="app/src/main/res/layout/activity_live_analysis.xml" value="0.2796875" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.20363636363636364" />
-        <entry key="app/src/main/res/layout/mode_selection.xml" value="0.23045267489711935" />
+        <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.10572916666666667" />
+        <entry key="app/src/main/res/layout/fragment_camera.xml" value="0.2477355072463768" />
+        <entry key="app/src/main/res/layout/mode_detection.xml" value="0.25075988769531243" />
+        <entry key="app/src/main/res/layout/mode_info.xml" value="0.23014831542968756" />
+        <entry key="app/src/main/res/layout/mode_selection.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/object_info.xml" value="0.2289901733398437" />
       </map>
     </option>
   </component>
