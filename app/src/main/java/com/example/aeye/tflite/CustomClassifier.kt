@@ -3,6 +3,7 @@ package com.example.aeye.tflite
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Size
+import com.example.aeye.R
 
 import org.tensorflow.lite.Tensor
 import org.tensorflow.lite.support.common.FileUtil
@@ -17,10 +18,9 @@ import org.tensorflow.lite.support.model.Model
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 
 import java.io.IOException
-import java.io.ObjectOutput
 import kotlin.math.min
 
-class CustomClassifier(private val modelName : String) {
+class CustomClassifier(private val mode_det : Int) {
 
     var modelInputWidth : Int = 0; var modelInputHeight : Int = 0; var modelInputChannel : Int = 0
 
@@ -29,13 +29,23 @@ class CustomClassifier(private val modelName : String) {
     lateinit var inputImage : TensorImage
     lateinit var outputBuffer : TensorBuffer
 
-    private val labelFile : String = "labels.text"
+    private lateinit var modelName : String
+    private lateinit var labelFile : String
     private lateinit var labels : List<String>
 
     private var isInitialized : Boolean = false
 
     @Throws(IOException::class)
     fun init() {
+        modelName = when(mode_det){
+            R.drawable.drink_icon -> "object_detection_example.tflite" //임시
+            else -> "object_detection_example1.tflite" //임시
+        }
+        labelFile = when(mode_det){
+            R.drawable.drink_icon -> "classes_drink.txt"
+            else -> "classes_medicine.txt"
+        }
+
         model = Model.createModel(context, modelName)
         initModelShape()
         labels = FileUtil.loadLabels(context, labelFile)

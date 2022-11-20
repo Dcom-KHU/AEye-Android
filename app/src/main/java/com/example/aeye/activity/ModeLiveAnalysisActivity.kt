@@ -112,8 +112,7 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         /** Init Classifier **/
-        if (modeIcon == R.drawable.drink_medicine || modeIcon == R.drawable.drink_icon)
-            cls = CustomClassifier("object_detection_example.tflite")
+        cls = CustomClassifier(modeIcon)
 
         try {
             cls.init()
