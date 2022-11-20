@@ -13,7 +13,7 @@ abstract class ObjectInfoDatabase: RoomDatabase() {
         private var instance: ObjectInfoDatabase? = null
 
         @Synchronized
-        fun getInstance(context: Context) : ObjectInfoDatabase? {
+        fun getDataBase(context: Context) : ObjectInfoDatabase? {
             if (instance == null){
                 synchronized(ObjectInfoDatabase::class){
                     instance = Room.databaseBuilder(
