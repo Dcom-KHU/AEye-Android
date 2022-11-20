@@ -22,9 +22,13 @@ import android.view.Surface
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.example.aeye.ObjectInfoViewModel
+import com.example.aeye.ObjectInfoViewModelFactory
 import com.example.aeye.R
+import com.example.aeye.application.DetectApplication
 import com.example.aeye.databinding.ActivityLiveAnalysisBinding
 import com.example.aeye.fragment.CameraFragment
 import com.example.aeye.listener.ShakeDetector
@@ -65,6 +69,11 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
     private var handlerThread: HandlerThread ?= null
     private var handler: Handler ?= null
     private var isProcessingFrame : Boolean = false
+
+    /** Implement ObjectInfoViewModel to observe ObjectInfoDatabase**/
+    private val objectInfoViewModel : ObjectInfoViewModel by viewModels{
+        ObjectInfoViewModelFactory((application as DetectApplication).repository)
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
