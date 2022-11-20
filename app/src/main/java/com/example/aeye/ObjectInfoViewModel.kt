@@ -13,7 +13,7 @@ class ObjectInfoViewModel(private val repository: ObjectInfoRepository) : ViewMo
 
     fun delete (objectInfo: ObjectInfo) = viewModelScope.launch { repository.delete(objectInfo) }
 
-    fun findByClassName (className : String) = viewModelScope.launch { repository.findByClassName(className) }
+    fun findByClassName (className : String) : ObjectInfo { return repository.findByClassName(className) }
 }
 
 class ObjectInfoViewModelFactory(private val repository: ObjectInfoRepository) : ViewModelProvider.Factory{

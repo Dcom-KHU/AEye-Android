@@ -21,7 +21,7 @@ class ObjectInfoRepository(private val objectInfoDao: ObjectInfoDao){
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun findByClassName(className: String) : ObjectInfo{
+    fun findByClassName(className: String) : ObjectInfo{
         return objectInfoDao.findByClassName(className)
     }
 
