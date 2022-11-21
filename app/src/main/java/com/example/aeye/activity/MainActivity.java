@@ -46,15 +46,15 @@ public class MainActivity extends FragmentActivity {
         //swipeListener = new SwipeListener(linearLayout, swipeCheckingText);
 
         modes = new ArrayList<>();
-        modes.add(new Mode(R.drawable.drink_background2,
-                R.drawable.drink_icon,
-                "음료 구매",
-                getResources().getColor(R.color.title_color1, null))
-        );
         modes.add(new Mode(R.drawable.medicine_background,
                 R.drawable.drink_medicine,
                 "의약품 구매",
                 getResources().getColor(R.color.title_color2, null))
+        );
+        modes.add(new Mode(R.drawable.drink_background2,
+                R.drawable.drink_icon,
+                "음료 구매",
+                getResources().getColor(R.color.title_color1, null))
         );
 
         fragmentAdapter = new FragmentAdapter(this, modes, modes.size());
@@ -73,8 +73,8 @@ public class MainActivity extends FragmentActivity {
         circleIndicator.createIndicators(modes.size(), 0);
 
         Integer[] colors_temp = {
-                getResources().getColor(R.color.background_color1, null),
-                getResources().getColor(R.color.background_color2, null)
+                getResources().getColor(R.color.background_color2, null),
+                getResources().getColor(R.color.background_color1, null)
         };
         colors = colors_temp;
 
