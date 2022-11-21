@@ -146,6 +146,7 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
     override fun onDestroy() {
         synchronized(this) {
             cls.finish()
+            textToSpeech.shutDown()
             super.onDestroy()
         }
     }
@@ -154,6 +155,9 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
     override fun onResume() {
         synchronized(this) {
             super.onResume()
+            accelerometer?.also { accel ->
+                sensorManager.registerListener(shakeDetector, accel, SensorManager.SENSOR_DELAY_NORMAL)
+            }
 
             handlerThread = HandlerThread("InferenceThread")
             handlerThread!!.start()
@@ -176,6 +180,7 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
             }
 
             super.onPause()
+            sensorManager.unregisterListener(shakeDetector)
         }
     }
 
