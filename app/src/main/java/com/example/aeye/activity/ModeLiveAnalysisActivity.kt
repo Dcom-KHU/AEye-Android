@@ -108,14 +108,15 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
 
         shakeDetector!!.setOnShakeListener(object : ShakeDetector.OnShakeListener {
             override fun onShake(count: Int) {
-
+                if (slidingUpPanel.panelState == SlidingUpPanelLayout.PanelState.EXPANDED)
+                    slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
             }
         })
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         /** Init Classifier **/
-        cls = CustomClassifier(modeIcon)
+        cls = CustomClassifier(this, modeIcon)
 
         try {
             cls.init()
@@ -346,7 +347,8 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
             previousState: SlidingUpPanelLayout.PanelState?,
             newState: SlidingUpPanelLayout.PanelState?
         ) {
-           /**if (newState == SlidingUpPanelLayout.PanelState.EXPANDED)**/
+           if (newState == SlidingUpPanelLayout.PanelState.EXPANDED)
+               textToSpeech.initQueue(binding.objectTitle.text.toString())
         }
     }
 

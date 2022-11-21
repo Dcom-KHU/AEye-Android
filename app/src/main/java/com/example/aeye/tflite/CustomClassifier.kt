@@ -20,11 +20,10 @@ import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.io.IOException
 import kotlin.math.min
 
-class CustomClassifier(private val mode_det : Int) {
+class CustomClassifier(private val context: Context, private val mode_det : Int) {
 
     var modelInputWidth : Int = 0; var modelInputHeight : Int = 0; var modelInputChannel : Int = 0
 
-    lateinit var context: Context
     lateinit var model: Model
     lateinit var inputImage : TensorImage
     lateinit var outputBuffer : TensorBuffer
@@ -38,8 +37,8 @@ class CustomClassifier(private val mode_det : Int) {
     @Throws(IOException::class)
     fun init() {
         modelName = when(mode_det){
-            R.drawable.drink_icon -> "object_detection_example.tflite" //임시
-            else -> "object_detection_example1.tflite" //임시
+            R.drawable.drink_icon -> "drink_detection_ver2_nms.tflite" //임시
+            else -> "object_detection_example.tflite" //임시
         }
         labelFile = when(mode_det){
             R.drawable.drink_icon -> "classes_drink.txt"
