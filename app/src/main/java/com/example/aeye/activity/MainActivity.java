@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import com.example.aeye.fragment.FragmentAdapter;
 import com.example.aeye.Mode;
 import com.example.aeye.R;
+import com.example.aeye.listener.TextToSpeechManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,41 +20,39 @@ import java.util.List;
 public class MainActivity extends FragmentActivity {
     //Initialize Variables
     LinearLayout linearLayout;
-    //TextView swipeCheckingText;
 
     ViewPager2 viewPager;
     FragmentAdapter fragmentAdapter;
-    //Adapter adapter;
     CircleIndicator3 circleIndicator;
+
+    TextToSpeechManager textToSpeech;
+    CharSequence infoToSpeechOut = null;
 
     List<Mode> modes;
     Integer[] colors = null;
     ArgbEvaluator argbEvaluator = new ArgbEvaluator();
 
-    //Swiping Detector Class Instance
-    //SwipeListener swipeListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Assign Variables for SwipeListener
         linearLayout = findViewById(R.id.linear_layout);
-        //swipeCheckingText = findViewById(R.id.swipe_checking_text);
 
-        //Initialize swipe listener
-        //swipeListener = new SwipeListener(linearLayout, swipeCheckingText);
+        /* Initialize TTS */
+        textToSpeech = new TextToSpeechManager();
+        textToSpeech.init(this);
 
         modes = new ArrayList<>();
         modes.add(new Mode(R.drawable.medicine_background,
                 R.drawable.drink_medicine,
-                "의약품 구매",
+                "의약품 탐지",
                 getResources().getColor(R.color.title_color2, null))
         );
         modes.add(new Mode(R.drawable.drink_background2,
                 R.drawable.drink_icon,
-                "음료 구매",
+                "음료 탐지",
                 getResources().getColor(R.color.title_color1, null))
         );
 
@@ -103,7 +102,10 @@ public class MainActivity extends FragmentActivity {
                 }
             }
             @Override
-            public void onPageSelected(int position) {}
+            public void onPageSelected(int position) {
+                CharSequence phrase = " 모드 입니다.";
+                textToSpeech.initQueue(modes.get(position).getTitle() + phrase);
+            }
 
             @Override
             public void onPageScrollStateChanged(int state) {}
