@@ -7,6 +7,7 @@ import me.relex.circleindicator.CircleIndicator3;
 import android.animation.ArgbEvaluator;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.example.aeye.fragment.FragmentAdapter;
@@ -77,6 +78,11 @@ public class MainActivity extends FragmentActivity {
         };
         colors = colors_temp;
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -110,8 +116,6 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onPageScrollStateChanged(int state) {}
         });
-
     }
-
 }
 
