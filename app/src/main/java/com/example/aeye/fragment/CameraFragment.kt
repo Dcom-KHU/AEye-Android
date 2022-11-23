@@ -235,9 +235,9 @@ class CameraFragment(
                 return desiredSize
             }
             if (option.height >= minSize && option.width >= minSize)
-                bigEnough.plus(option)
+                bigEnough.add(option)
             else
-                tooSmall.plus(option)
+                tooSmall.add(option)
 
         }
         return if (bigEnough.isNotEmpty())

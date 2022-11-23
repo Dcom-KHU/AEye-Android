@@ -7,11 +7,13 @@ import me.relex.circleindicator.CircleIndicator3;
 import android.animation.ArgbEvaluator;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.example.aeye.fragment.FragmentAdapter;
 import com.example.aeye.Mode;
 import com.example.aeye.R;
+import com.example.aeye.listener.TextToSpeechManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,42 +21,40 @@ import java.util.List;
 public class MainActivity extends FragmentActivity {
     //Initialize Variables
     LinearLayout linearLayout;
-    //TextView swipeCheckingText;
 
     ViewPager2 viewPager;
     FragmentAdapter fragmentAdapter;
-    //Adapter adapter;
     CircleIndicator3 circleIndicator;
+
+    TextToSpeechManager textToSpeech;
+    CharSequence infoToSpeechOut = null;
 
     List<Mode> modes;
     Integer[] colors = null;
     ArgbEvaluator argbEvaluator = new ArgbEvaluator();
 
-    //Swiping Detector Class Instance
-    //SwipeListener swipeListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Assign Variables for SwipeListener
         linearLayout = findViewById(R.id.linear_layout);
-        //swipeCheckingText = findViewById(R.id.swipe_checking_text);
 
-        //Initialize swipe listener
-        //swipeListener = new SwipeListener(linearLayout, swipeCheckingText);
+        /* Initialize TTS */
+        textToSpeech = new TextToSpeechManager();
+        textToSpeech.init(this);
 
         modes = new ArrayList<>();
-        modes.add(new Mode(R.drawable.drink_background2,
-                R.drawable.drink_icon,
-                "음료 구매",
-                getResources().getColor(R.color.title_color1, null))
-        );
         modes.add(new Mode(R.drawable.medicine_background,
                 R.drawable.drink_medicine,
-                "의약품 구매",
+                "의약품 탐지",
                 getResources().getColor(R.color.title_color2, null))
+        );
+        modes.add(new Mode(R.drawable.drink_background2,
+                R.drawable.drink_icon,
+                "음료 탐지",
+                getResources().getColor(R.color.title_color1, null))
         );
 
         fragmentAdapter = new FragmentAdapter(this, modes, modes.size());
@@ -73,11 +73,16 @@ public class MainActivity extends FragmentActivity {
         circleIndicator.createIndicators(modes.size(), 0);
 
         Integer[] colors_temp = {
-                getResources().getColor(R.color.background_color1, null),
-                getResources().getColor(R.color.background_color2, null)
+                getResources().getColor(R.color.background_color2, null),
+                getResources().getColor(R.color.background_color1, null)
         };
         colors = colors_temp;
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -103,13 +108,14 @@ public class MainActivity extends FragmentActivity {
                 }
             }
             @Override
-            public void onPageSelected(int position) {}
+            public void onPageSelected(int position) {
+                CharSequence phrase = " 모드 입니다.";
+                textToSpeech.initQueue(modes.get(position).getTitle() + phrase);
+            }
 
             @Override
             public void onPageScrollStateChanged(int state) {}
         });
-
     }
-
 }
 

@@ -16,9 +16,10 @@ abstract class ObjectInfoDatabase: RoomDatabase() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
 
+            val list : List<ObjectInfo> = initDatabase()
             instance?.let {
                 scope.launch {
-                    for (info : ObjectInfo in initDatabase()){
+                    for (info : ObjectInfo in list){
                         it.objectInfoDao().insert(info)
                     }
                 }

@@ -67,7 +67,7 @@ class YuvToRgbConverter {
 
                 val planeWidth : Int = planeCrop.width()
                 val planeHeight : Int = planeCrop.height()
-                val rowBuffer = byteArrayOf(plane.rowStride.toByte())
+                val rowBuffer = ByteArray(plane.rowStride)
 
                 val rowLength : Int = if(pixelStride == 1 && outputStride == 1){
                     planeWidth
@@ -85,7 +85,7 @@ class YuvToRgbConverter {
                     }
                     else {
                         planeBuffer.get(rowBuffer, 0, rowLength)
-                        for (col in 0..planeWidth){
+                        for (col in 0 until planeWidth){
                             outputBuffer[outputOffset] = rowBuffer[col * pixelStride]
                             outputOffset += outputStride
                         }
