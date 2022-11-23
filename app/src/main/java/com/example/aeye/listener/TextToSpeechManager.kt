@@ -39,7 +39,7 @@ class TextToSpeechManager {
 
     fun addQueue(info : CharSequence){
         if (isLoaded) {
-            mTextToSpeech!!.setSpeechRate(0.4F)
+            mTextToSpeech!!.setSpeechRate(0.6F)
             mTextToSpeech!!.setPitch(0.6F)
             mTextToSpeech!!.speak(info, TextToSpeech.QUEUE_ADD, null, "id1")
         }
@@ -50,7 +50,7 @@ class TextToSpeechManager {
 
     fun initQueue(info : CharSequence){
         if (isLoaded) {
-            mTextToSpeech!!.setSpeechRate(0.4F)
+            mTextToSpeech!!.setSpeechRate(1F)
             mTextToSpeech!!.setPitch(0.6F)
             mTextToSpeech!!.speak(info, TextToSpeech.QUEUE_FLUSH, null, "id1")
         }

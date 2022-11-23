@@ -44,7 +44,7 @@ class CustomClassifier(private val context: Context, private val mode_det : Int)
     fun init() {
         modelName = when(mode_det){
             R.drawable.drink_icon -> "drinkmodel_final_metadata.tflite" //임시 nms 처리 파일
-            else -> "medicine_model_metadata.tflite" //예시 파일
+            else -> "medicine_model_metadata_v2.tflite" //예시 파일
         }
         labelFile = when(mode_det){
             R.drawable.drink_icon -> "classes_drink.txt"
