@@ -119,24 +119,29 @@ class CustomClassifier(private val context: Context, private val mode_det : Int)
 
         var recognitionArray = outputBuffer.floatArray
 
-        for (idx_i in 0 until 5){
-            var maxLabelScores : Float = 0f
+        var maxLabelScores = recognitionArray[4]
+        for (idx_i in 0 until 10647){
 
             val gridStride : Int = idx_i * outputSize[2]
             val confidence : Float = recognitionArray[4 + gridStride]
             val classScores : FloatArray = recognitionArray.copyOfRange(5 + gridStride, outputSize[2] + gridStride)
 
-            for (idx_j : Int in classScores.indices){
-                if (classScores[idx_j] > maxLabelScores) {
-                    maxLabelScores = classScores[idx_j]
-                    outputLabelId = idx_j
-                }
-            }
-
-            if (maxLabelScores < 0.7f){
-                outputLabelId = outputLabels.size - 1
+            if (confidence > maxLabelScores) {
+                maxLabelScores = confidence
+                outputLabelId = idx_i
             }
         }
+
+        Log.d("Classifier", "index : ".plus(maxLabelScores.toString()))
+        outputLabelId = if (maxLabelScores > 0.5f){
+            if (mode_det == R.drawable.drink_icon)
+                argmax(recognitionArray, outputLabelId, 16)
+            else
+                argmax(recognitionArray, outputLabelId, 12)
+        } else{
+            outputLabels.size - 1
+        }
+
         Log.d("Classifier", outputLabels[outputLabelId])
         //val output : Map<String, Float> = TensorLabel(labels, outputBuffer).mapWithFloatValue
         return Pair(outputLabels[outputLabelId], 95f)
@@ -144,19 +149,18 @@ class CustomClassifier(private val context: Context, private val mode_det : Int)
 
     fun classify(image: Bitmap) : Pair<String, Float> = classify(image, 0)
 
-    private fun argmax(map : Map<String, Float>) : Pair<String, Float>{
-        var maxKey = ""
-        var maxVal : Float = -1f
+    private fun argmax(floatArray: FloatArray, initId : Int, targetIdx : Int) : Int{
+        var maxIdx = 0 ; var maxValue = 0f
+        val initIndex = initId * model.getOutputTensor(0).shape()[2]
+        val testArray = floatArray.copyOfRange(initIndex + 5, initIndex + targetIdx)
 
-        for (entry : Map.Entry<String, Float> in map.entries){
-            val f : Float = entry.value
-            if (f > maxVal){
-                maxKey = entry.key
-                maxVal = entry.value
+        for (idx in testArray.indices){
+            if (testArray[idx] > maxValue){
+                maxValue = testArray[idx]
+                maxIdx = idx
             }
         }
-
-        return Pair(maxKey, maxVal)
+        return maxIdx
     }
 
     fun finish() {
