@@ -57,7 +57,7 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
 
     /**For using TTS API**/
     private lateinit var textToSpeech: TextToSpeechManager
-    private var detectedClass : String = "Undefined"
+    private var detectedClass : String = "undefined"
     private var detectedRating : Float = 0f
     private var infoToSpeechOut : CharSequence ?= null
 
@@ -78,7 +78,7 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
         ObjectInfoViewModelFactory((application as DetectApplication).repository)
     }
 
-
+    @OptIn(InternalCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -101,18 +101,19 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
         textToSpeech = TextToSpeechManager()
         textToSpeech.init(this)
 
-        /**Initialize SensorManager and Accelerometer **/
-        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        shakeDetector = ShakeDetector()
+        synchronized(this) {
+            /**Initialize SensorManager and Accelerometer **/
+            sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+            shakeDetector = ShakeDetector()
 
-        shakeDetector!!.setOnShakeListener(object : ShakeDetector.OnShakeListener {
-            override fun onShake(count: Int) {
-                if (slidingUpPanel.panelState == SlidingUpPanelLayout.PanelState.EXPANDED)
-                    slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-            }
-        })
-
+            shakeDetector!!.setOnShakeListener(object : ShakeDetector.OnShakeListener {
+                override fun onShake(count: Int) {
+                    if (slidingUpPanel.panelState == SlidingUpPanelLayout.PanelState.EXPANDED)
+                        slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+                }
+            })
+        }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         /** Init Classifier **/
@@ -311,14 +312,17 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
             if (cls.isInitialized()){
                 val output : Pair<String, Float> = cls.classify(rgbFrameBitmap!!, sensorOrientation)
 
+                detectedRating = output.second
+                detectedClass = if(detectedRating >= 50) output.first else "undefined"
+
+                val detected : ObjectInfo = objectInfoViewModel.findByClassName(detectedClass)
+
                 runOnUiThread {
                     /**
                     val resultStr : String = String.format(Locale.ENGLISH,
                         "class : %s, prob : %.2f%%",
                         output.first, output.second * 100)
                     **/
-                    detectedRating = output.second * 100
-                    detectedClass = if(detectedRating >= 50) output.first else "Undefined"
                     setPanelLayoutData(detectedClass)
                 }
             }
@@ -333,10 +337,10 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
     }
 
     private fun setPanelLayoutData(detected : String){
-        runInBackground{
-            val receivedData : ObjectInfo = objectInfoViewModel.findByClassName(detected)
-            binding.objectTitle.text = receivedData.objectName
-            binding.objectDescription.text = receivedData.className
+        //val receivedData = objectInfoViewModel.findByClassName(detectedClass)
+        if (slidingUpPanel.panelState == SlidingUpPanelLayout.PanelState.COLLAPSED){
+            binding.objectTitle.text = detected
+            binding.objectDescription.text = detected
         }
     }
 
