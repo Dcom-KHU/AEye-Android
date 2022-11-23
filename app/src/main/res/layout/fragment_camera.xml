@@ -8,6 +8,7 @@
     <com.example.aeye.env.AutoFitTextureView
         android:id="@+id/autoFitTextureView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"/>
 
 </FrameLayout>
