@@ -243,7 +243,7 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
             )
 
             Log.d(TAG, "inputSize : " + cls.getModelInputSize() +
-                    "sensorOrientation : " + sensorOrientation)
+                    "\nsensorOrientation : " + sensorOrientation)
 
             supportFragmentManager.commit {
                 replace(binding.cameraFragment.id, fragment)
@@ -318,7 +318,7 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
                         output.first, output.second * 100)
                     **/
                     detectedRating = output.second * 100
-                    detectedClass = if(detectedRating >= 95) output.first else "Undefined"
+                    detectedClass = if(detectedRating >= 50) output.first else "Undefined"
                     setPanelLayoutData(detectedClass)
                 }
             }
@@ -333,9 +333,11 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
     }
 
     private fun setPanelLayoutData(detected : String){
-        val receivedData : ObjectInfo = objectInfoViewModel.findByClassName(detected)
-        binding.objectTitle.text = receivedData.objectName
-        binding.objectDescription.text = receivedData.className
+        runInBackground{
+            val receivedData : ObjectInfo = objectInfoViewModel.findByClassName(detected)
+            binding.objectTitle.text = receivedData.objectName
+            binding.objectDescription.text = receivedData.className
+        }
     }
 
     inner class PanelEventListener : SlidingUpPanelLayout.PanelSlideListener {
@@ -354,7 +356,7 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
 
     companion object{
         @JvmStatic
-        val TAG : String = "[IC]MainActivity"
+        val TAG : String = "[IC]ModeLiveAnalysisActivity"
 
         @JvmStatic
         val CAMERA_PERMISSION : String = android.Manifest.permission.CAMERA
