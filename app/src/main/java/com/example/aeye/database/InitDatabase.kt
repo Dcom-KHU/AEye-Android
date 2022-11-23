@@ -23,5 +23,7 @@ fun initDatabase() : List<ObjectInfo> {
     list.plus(ObjectInfo("Geworinsoft", "게보린 소프트", ""))
     list.plus(ObjectInfo("Gas", "가스활명수", ""))
 
+    list.plus(ObjectInfo("undefined", "물체 탐지 전", ""))
+
     return list
 }

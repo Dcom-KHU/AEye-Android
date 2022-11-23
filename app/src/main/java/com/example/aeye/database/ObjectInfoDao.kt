@@ -8,7 +8,7 @@ interface ObjectInfoDao {
     @Insert
     suspend fun insert(objectInfo: ObjectInfo)
 
-    @Query("SELECT * FROM object_info WHERE class_name LIKE :category LIMIT 1")
+    @Query("SELECT * FROM object_info WHERE class_name = :category")
     fun findByClassName(category: String): ObjectInfo
 
     @Delete
