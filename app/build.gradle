@@ -5,14 +5,14 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.aeye"
         minSdk 26
-        targetSdk 32
+        targetSdk 33
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -83,9 +83,9 @@ dependencies {
     implementation 'org.tensorflow:tensorflow-lite-select-tf-ops:0.0.0-nightly-SNAPSHOT'
 
     //For Room Database
-    implementation 'androidx.room:room-runtime:2.4.3'
-    kapt 'androidx.room:room-compiler:2.4.3'
-    implementation "androidx.room:room-ktx:2.4.3"
+    implementation 'androidx.room:room-runtime:2.5.0'
+    kapt 'androidx.room:room-compiler:2.5.0'
+    implementation "androidx.room:room-ktx:2.5.0"
 
     //lifecycle components
     implementation 'androidx.lifecycle:lifecycle-common-java8:2.5.1'
