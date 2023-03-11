@@ -1,4 +1,4 @@
-package com.example.aeye.database
+package com.example.aeye.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

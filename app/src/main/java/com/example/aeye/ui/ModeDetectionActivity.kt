@@ -1,4 +1,4 @@
-package com.example.aeye.activity
+package com.example.aeye.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -24,7 +24,7 @@ import androidx.fragment.app.*
 import androidx.lifecycle.LifecycleOwner
 
 import com.example.aeye.databinding.ModeDetectionBinding
-import com.example.aeye.listener.ShakeDetector
+import com.example.aeye.ui.listener.ShakeDetector
 
 import com.example.aeye.env.Draw
 //import com.example.aeye.fragment.ObjectInfo_Fragment

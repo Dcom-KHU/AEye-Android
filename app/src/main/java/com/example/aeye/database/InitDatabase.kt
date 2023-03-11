@@ -1,5 +1,7 @@
 package com.example.aeye.database
 
+import com.example.aeye.model.ObjectInfo
+
 fun initDatabase() : List<ObjectInfo> {
     var list = emptyList<ObjectInfo>()
 

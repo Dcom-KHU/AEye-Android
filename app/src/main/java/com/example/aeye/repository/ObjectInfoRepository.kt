@@ -1,6 +1,8 @@
-package com.example.aeye.database
+package com.example.aeye.repository
 
 import androidx.annotation.WorkerThread
+import com.example.aeye.database.ObjectInfoDao
+import com.example.aeye.model.ObjectInfo
 import kotlinx.coroutines.flow.Flow
 
 class ObjectInfoRepository(private val objectInfoDao: ObjectInfoDao){
@@ -21,7 +23,7 @@ class ObjectInfoRepository(private val objectInfoDao: ObjectInfoDao){
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    fun findByClassName(className: String) : ObjectInfo{
+    fun findByClassName(className: String) : ObjectInfo {
         return objectInfoDao.findByClassName(className)
     }
 

@@ -1,4 +1,4 @@
-package com.example.aeye.activity;
+package com.example.aeye.ui;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -7,13 +7,12 @@ import me.relex.circleindicator.CircleIndicator3;
 import android.animation.ArgbEvaluator;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.LinearLayout;
 
-import com.example.aeye.fragment.FragmentAdapter;
+import com.example.aeye.ui.fragment.FragmentAdapter;
 import com.example.aeye.Mode;
 import com.example.aeye.R;
-import com.example.aeye.listener.TextToSpeechManager;
+import com.example.aeye.ui.listener.TextToSpeechManager;
 
 import java.util.ArrayList;
 import java.util.List;

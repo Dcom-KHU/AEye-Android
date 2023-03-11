@@ -1,8 +1,8 @@
 package com.example.aeye
 
 import androidx.lifecycle.*
-import com.example.aeye.database.ObjectInfo
-import com.example.aeye.database.ObjectInfoRepository
+import com.example.aeye.model.ObjectInfo
+import com.example.aeye.repository.ObjectInfoRepository
 import kotlinx.coroutines.launch
 
 class ObjectInfoViewModel(private val repository: ObjectInfoRepository) : ViewModel() {

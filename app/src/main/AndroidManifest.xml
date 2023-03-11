@@ -26,11 +26,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AEye.NoActionBar">
         <activity
-            android:name=".activity.ModeLiveAnalysisActivity"
+            android:name=".ui.ModeLiveAnalysisActivity"
             android:exported="false" />
-        <activity android:name=".activity.ModeDetectionActivity" />
+        <activity android:name=".ui.ModeDetectionActivity" />
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

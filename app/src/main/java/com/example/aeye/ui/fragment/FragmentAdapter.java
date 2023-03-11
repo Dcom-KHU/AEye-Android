@@ -1,4 +1,4 @@
-package com.example.aeye.fragment;
+package com.example.aeye.ui.fragment;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

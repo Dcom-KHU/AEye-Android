@@ -1,6 +1,7 @@
 package com.example.aeye.database
 
 import androidx.room.*
+import com.example.aeye.model.ObjectInfo
 import kotlinx.coroutines.flow.Flow
 
 @Dao
