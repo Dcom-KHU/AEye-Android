@@ -11,5 +11,4 @@ data class ObjectInfo(
     @ColumnInfo(name = "medicine_info") var info : String
 ){
     @PrimaryKey(autoGenerate = true) var id: Int = 0
-    constructor(): this("", "", "")
 }
