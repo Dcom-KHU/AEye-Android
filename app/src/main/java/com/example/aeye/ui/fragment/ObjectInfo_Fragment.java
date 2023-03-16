@@ -1,4 +1,4 @@
-package com.example.aeye.fragment;
+package com.example.aeye.ui.fragment;
 
 import android.os.Bundle;
 

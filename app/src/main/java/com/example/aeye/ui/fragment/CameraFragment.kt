@@ -1,4 +1,4 @@
-package com.example.aeye.fragment
+package com.example.aeye.ui.fragment
 
 import android.annotation.SuppressLint
 import android.content.Context

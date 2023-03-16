@@ -2,7 +2,7 @@ package com.example.aeye.application
 
 import android.app.Application
 import com.example.aeye.database.ObjectInfoDatabase
-import com.example.aeye.database.ObjectInfoRepository
+import com.example.aeye.repository.ObjectInfoRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 

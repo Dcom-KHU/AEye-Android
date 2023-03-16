@@ -1,4 +1,4 @@
-package com.example.aeye.activity
+package com.example.aeye.ui
 
 import android.content.Context
 import android.content.pm.PackageManager
@@ -29,11 +29,11 @@ import com.example.aeye.ObjectInfoViewModel
 import com.example.aeye.ObjectInfoViewModelFactory
 import com.example.aeye.R
 import com.example.aeye.application.DetectApplication
-import com.example.aeye.database.ObjectInfo
+import com.example.aeye.model.ObjectInfo
 import com.example.aeye.databinding.ActivityLiveAnalysisBinding
-import com.example.aeye.fragment.CameraFragment
-import com.example.aeye.listener.ShakeDetector
-import com.example.aeye.listener.TextToSpeechManager
+import com.example.aeye.ui.fragment.CameraFragment
+import com.example.aeye.ui.listener.ShakeDetector
+import com.example.aeye.ui.listener.TextToSpeechManager
 import com.example.aeye.tflite.CustomClassifier
 import com.example.aeye.tflite.YuvToRgbConverter
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -51,30 +51,30 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
     private lateinit var slidingUpPanel: SlidingUpPanelLayout
 
     /**For detecting shake events**/
-    private lateinit var sensorManager : SensorManager
-    private var accelerometer : Sensor ?= null
-    private var shakeDetector : ShakeDetector ?= null
+    private lateinit var sensorManager: SensorManager
+    private var accelerometer: Sensor? = null
+    private var shakeDetector: ShakeDetector? = null
 
     /**For using TTS API**/
     private lateinit var textToSpeech: TextToSpeechManager
-    private var detectedClass : String = "undefined"
-    private var detectedRating : Float = 0f
-    private var infoToSpeechOut : CharSequence ?= null
+    private var detectedClass: String = "undefined"
+    private var detectedRating: Float = 0f
+    private var infoToSpeechOut: CharSequence? = null
 
     /** For Classifier **/
-    private lateinit var cls : CustomClassifier
-    private var previewWidth : Int = 0
-    private var previewHeight : Int = 0
-    private var sensorOrientation : Int = 0
-    private var rgbFrameBitmap : Bitmap ?= null
+    private lateinit var cls: CustomClassifier
+    private var previewWidth: Int = 0
+    private var previewHeight: Int = 0
+    private var sensorOrientation: Int = 0
+    private var rgbFrameBitmap: Bitmap? = null
 
     /** For handling background thread**/
-    private var handlerThread: HandlerThread ?= null
-    private var handler: Handler ?= null
-    private var isProcessingFrame : Boolean = false
+    private var handlerThread: HandlerThread? = null
+    private var handler: Handler? = null
+    private var isProcessingFrame: Boolean = false
 
     /** Implement ObjectInfoViewModel to observe ObjectInfoDatabase**/
-    private val objectInfoViewModel : ObjectInfoViewModel by viewModels{
+    private val objectInfoViewModel: ObjectInfoViewModel by viewModels {
         ObjectInfoViewModelFactory((application as DetectApplication).repository)
     }
 
@@ -86,8 +86,8 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         /**Get Intent from ModeInfo_Fragment**/
-        val modeIcon : Int = intent.getIntExtra("modeIcon", R.drawable.aeye_icon1)
-        val modeColor : Int = intent.getIntExtra("modeColor", R.color.black)
+        val modeIcon: Int = intent.getIntExtra("modeIcon", R.drawable.aeye_icon1)
+        val modeColor: Int = intent.getIntExtra("modeColor", R.color.black)
 
         /**Init slidingUpPanel and its elements**/
         slidingUpPanel = binding.mainPanelFrame
@@ -121,14 +121,13 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
 
         try {
             cls.init()
-        } catch (ioe : IOException) {
+        } catch (ioe: IOException) {
             ioe.printStackTrace()
         }
 
-        if (checkSelfPermission(CAMERA_PERMISSION) == PackageManager.PERMISSION_GRANTED){
+        if (checkSelfPermission(CAMERA_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
             setFragment()
-        }
-        else {
+        } else {
             requestPermissions(Array(1) { CAMERA_PERMISSION }, PERMISSION_REQUEST_CODE)
         }
 
@@ -136,7 +135,7 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
 
     /** Detect pressing volume down key **/
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
             if (slidingUpPanel.panelState == SlidingUpPanelLayout.PanelState.COLLAPSED)
                 slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
             return true
@@ -158,7 +157,11 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
         synchronized(this) {
             super.onResume()
             accelerometer?.also { accel ->
-                sensorManager.registerListener(shakeDetector, accel, SensorManager.SENSOR_DELAY_NORMAL)
+                sensorManager.registerListener(
+                    shakeDetector,
+                    accel,
+                    SensorManager.SENSOR_DELAY_NORMAL
+                )
             }
 
             handlerThread = HandlerThread("InferenceThread")
@@ -177,7 +180,7 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
                 handlerThread!!.join()
                 handlerThread = null
                 handler = null
-            } catch (e : InterruptedException){
+            } catch (e: InterruptedException) {
                 e.printStackTrace()
             }
 
@@ -188,14 +191,14 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
 
     @OptIn(InternalCoroutinesApi::class)
     override fun onStart() {
-        synchronized(this){
+        synchronized(this) {
             super.onStart()
         }
     }
 
     @OptIn(InternalCoroutinesApi::class)
     override fun onStop() {
-        synchronized(this){
+        synchronized(this) {
             super.onStop()
         }
     }
@@ -205,32 +208,31 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        if (requestCode == PERMISSION_REQUEST_CODE){
-            if (grantResults.isNotEmpty() && allPermissionsGranted(grantResults)){
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && allPermissionsGranted(grantResults)) {
                 setFragment()
-            }
-            else {
+            } else {
                 Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show()
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    private fun allPermissionsGranted(grantResults: IntArray) : Boolean{
-        for (result : Int in grantResults){
-            if (result != PackageManager.PERMISSION_GRANTED){
+    private fun allPermissionsGranted(grantResults: IntArray): Boolean {
+        for (result: Int in grantResults) {
+            if (result != PackageManager.PERMISSION_GRANTED) {
                 return false
             }
         }
         return true
     }
 
-    private fun setFragment(){
-        val inputSize : Size = cls.getModelInputSize()
-        val cameraId : String = chooseCamera()
+    private fun setFragment() {
+        val inputSize: Size = cls.getModelInputSize()
+        val cameraId: String = chooseCamera()
 
-        if (inputSize.width > 0 && inputSize.height > 0 && cameraId.isNotEmpty()){
-            val fragment : Fragment = CameraFragment.newInstance(
+        if (inputSize.width > 0 && inputSize.height > 0 && cameraId.isNotEmpty()) {
+            val fragment: Fragment = CameraFragment.newInstance(
                 object : CameraFragment.ConnectionCallback {
                     override fun onPreviewSizeChosen(size: Size?, cameraRotation: Int) {
                         previewWidth = size!!.width
@@ -243,40 +245,41 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
                 cameraId
             )
 
-            Log.d(TAG, "inputSize : " + cls.getModelInputSize() +
-                    "\nsensorOrientation : " + sensorOrientation)
+            Log.d(
+                TAG, "inputSize : " + cls.getModelInputSize() +
+                        "\nsensorOrientation : " + sensorOrientation
+            )
 
             supportFragmentManager.commit {
                 replace(binding.cameraFragment.id, fragment)
             }
-        }
-        else {
+        } else {
             Toast.makeText(this, "Can't find camera", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun chooseCamera() : String {
-        val manager : CameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+    private fun chooseCamera(): String {
+        val manager: CameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
         try {
-            for (cameraId : String in manager.cameraIdList){
-                val characteristics : CameraCharacteristics =
+            for (cameraId: String in manager.cameraIdList) {
+                val characteristics: CameraCharacteristics =
                     manager.getCameraCharacteristics(cameraId)
 
-                val facing : Int? = characteristics.get(CameraCharacteristics.LENS_FACING)
-                if (facing != null && facing == CameraCharacteristics.LENS_FACING_BACK){
+                val facing: Int? = characteristics.get(CameraCharacteristics.LENS_FACING)
+                if (facing != null && facing == CameraCharacteristics.LENS_FACING_BACK) {
                     return cameraId
                 }
             }
-        } catch (e : CameraAccessException){
+        } catch (e: CameraAccessException) {
             e.printStackTrace()
         }
 
         return ""
     }
 
-    private fun getScreenOrientation() : Int {
+    private fun getScreenOrientation(): Int {
         //API Level 30 이상에서는 context.getDisplay() 사용
-        val rotation : Int? = when {
+        val rotation: Int? = when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
                 this.display?.rotation
             }
@@ -293,36 +296,39 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
         }
     }
 
-    private fun processImage(reader: ImageReader){
+    private fun processImage(reader: ImageReader) {
         if (previewWidth == 0 || previewHeight == 0) return
 
-        if (rgbFrameBitmap == null){
-            rgbFrameBitmap = Bitmap.createBitmap(previewWidth, previewHeight, Bitmap.Config.ARGB_8888)
+        if (rgbFrameBitmap == null) {
+            rgbFrameBitmap =
+                Bitmap.createBitmap(previewWidth, previewHeight, Bitmap.Config.ARGB_8888)
         }
 
         if (isProcessingFrame) return
         isProcessingFrame = true
 
-        val image : Image? = reader.acquireLatestImage()
-        if (image == null) { isProcessingFrame = false; return }
+        val image: Image? = reader.acquireLatestImage()
+        if (image == null) {
+            isProcessingFrame = false; return
+        }
 
         YuvToRgbConverter.yuvToRgb(this, image, rgbFrameBitmap!!)
 
         runInBackground {
-            if (cls.isInitialized()){
-                val output : Pair<String, Float> = cls.classify(rgbFrameBitmap!!, sensorOrientation)
+            if (cls.isInitialized()) {
+                val output: Pair<String, Float> = cls.classify(rgbFrameBitmap!!, sensorOrientation)
 
                 detectedRating = output.second
-                detectedClass = if(detectedRating >= 50) output.first else "undefined"
+                detectedClass = if (detectedRating >= 50) output.first else "undefined"
 
-                val detected : ObjectInfo = objectInfoViewModel.findByClassName(detectedClass)
+                val detected: ObjectInfo = objectInfoViewModel.findByClassName(detectedClass)
 
                 runOnUiThread {
                     /**
                     val resultStr : String = String.format(Locale.ENGLISH,
-                        "class : %s, prob : %.2f%%",
-                        output.first, output.second * 100)
-                    **/
+                    "class : %s, prob : %.2f%%",
+                    output.first, output.second * 100)
+                     **/
                     setPanelLayoutData(detectedClass)
                 }
             }
@@ -332,13 +338,13 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
 
     }
 
-    private fun runInBackground(r : Runnable){
+    private fun runInBackground(r: Runnable) {
         if (handler != null) handler!!.post(r)
     }
 
-    private fun setPanelLayoutData(detected : String){
+    private fun setPanelLayoutData(detected: String) {
         //val receivedData = objectInfoViewModel.findByClassName(detectedClass)
-        if (slidingUpPanel.panelState == SlidingUpPanelLayout.PanelState.COLLAPSED){
+        if (slidingUpPanel.panelState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
             binding.objectTitle.text = detected
             binding.objectDescription.text = detected
         }
@@ -348,24 +354,25 @@ class ModeLiveAnalysisActivity : AppCompatActivity() {
         override fun onPanelSlide(panel: View?, slideOffset: Float) {
             //ignore
         }
+
         override fun onPanelStateChanged(
             panel: View?,
             previousState: SlidingUpPanelLayout.PanelState?,
             newState: SlidingUpPanelLayout.PanelState?
         ) {
-           if (newState == SlidingUpPanelLayout.PanelState.EXPANDED)
-               textToSpeech.initQueue(binding.objectTitle.text.toString())
+            if (newState == SlidingUpPanelLayout.PanelState.EXPANDED)
+                textToSpeech.initQueue(binding.objectTitle.text.toString())
         }
     }
 
-    companion object{
+    companion object {
         @JvmStatic
-        val TAG : String = "[IC]ModeLiveAnalysisActivity"
+        val TAG: String = "[IC]ModeLiveAnalysisActivity"
 
         @JvmStatic
-        val CAMERA_PERMISSION : String = android.Manifest.permission.CAMERA
+        val CAMERA_PERMISSION: String = android.Manifest.permission.CAMERA
 
         @JvmStatic
-        val PERMISSION_REQUEST_CODE : Int = 1
+        val PERMISSION_REQUEST_CODE: Int = 1
     }
 }

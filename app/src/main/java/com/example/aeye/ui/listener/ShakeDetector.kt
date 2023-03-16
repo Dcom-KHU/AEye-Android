@@ -1,4 +1,4 @@
-package com.example.aeye.listener
+package com.example.aeye.ui.listener
 
 import android.hardware.Sensor
 import android.hardware.SensorEvent

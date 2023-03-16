@@ -1,4 +1,4 @@
-package com.example.aeye.fragment;
+package com.example.aeye.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.example.aeye.Mode;
 import com.example.aeye.R;
-import com.example.aeye.activity.ModeLiveAnalysisActivity;
+import com.example.aeye.ui.ModeLiveAnalysisActivity;
 
 public class ModeInfo_Fragment extends Fragment {
 

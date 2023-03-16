@@ -1,4 +1,4 @@
-package com.example.aeye.database
+package com.example.aeye.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -11,5 +11,4 @@ data class ObjectInfo(
     @ColumnInfo(name = "medicine_info") var info : String
 ){
     @PrimaryKey(autoGenerate = true) var id: Int = 0
-    constructor(): this("", "", "")
 }
