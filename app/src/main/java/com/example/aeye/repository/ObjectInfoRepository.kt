@@ -7,18 +7,18 @@ import kotlinx.coroutines.flow.Flow
 
 class ObjectInfoRepository(private val objectInfoDao: ObjectInfoDao){
 
-    val allObjects : Flow<List<ObjectInfo>> = objectInfoDao.getAll()
+    val allObjects : Flow<List<ObjectInfo>> = objectInfoDao.getAllData()
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun insert(newInfo: ObjectInfo){
-        objectInfoDao.insert(newInfo)
+        objectInfoDao.insertData(newInfo)
     }
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun delete(nonInfo: ObjectInfo){
-        objectInfoDao.delete(nonInfo)
+        objectInfoDao.deleteData(nonInfo)
     }
 
     @Suppress("RedundantSuspendModifier")
